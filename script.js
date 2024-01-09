@@ -1,4 +1,4 @@
-// script.js
+// your_script.js
 
 document.getElementById("myForm").addEventListener("submit", function (e) {
   e.preventDefault();
