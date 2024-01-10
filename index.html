@@ -3,42 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <title>Formulir JSON NoSQL</title>
+  <title>Short URL Generator</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container mt-5">
-  <form id="jsonForm">
-    <div class="mb-3">
-      <label for="name" class="form-label">Nama:</label>
-      <input type="text" class="form-control" id="name" name="name" required>
+  <h2>Short URL Generator</h2>
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" id="originalUrl" placeholder="Paste your URL here">
+    <div class="input-group-append">
+      <button class="btn btn-primary" onclick="generateShortUrl()">Generate Short URL</button>
     </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">Email:</label>
-      <input type="email" class="form-control" id="email" name="email" required>
-    </div>
-    <div class="mb-3">
-      <label for="age" class="form-label">Umur:</label>
-      <input type="number" class="form-control" id="age" name="age" required>
-    </div>
-    <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
-  </form>
+  </div>
+  <div class="alert alert-success" id="shortUrlContainer" style="display: none;">
+    Short URL: <a href="#" id="shortUrl" target="_blank"></a>
+  </div>
 </div>
 
-<script>
-  function submitForm() {
-    const formData = {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      age: document.getElementById('age').value
-    };
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    // Simpan formData ke NoSQL database atau lakukan operasi lainnya
-    console.log('Data yang akan disubmit:', formData);
+<script>
+  function generateShortUrl() {
+    var originalUrl = document.getElementById('originalUrl').value;
+    // Implement your short URL generation logic here (backend/API call).
+    // For this example, let's assume you have a function generateShortUrlBackend(originalUrl)
+    // that returns the short URL.
+    var shortUrl = generateShortUrlBackend(originalUrl);
+
+    // Display the short URL
+    document.getElementById('shortUrl').href = shortUrl;
+    document.getElementById('shortUrl').innerText = shortUrl;
+    document.getElementById('shortUrlContainer').style.display = 'block';
+  }
+
+  function generateShortUrlBackend(originalUrl) {
+    // Implement your backend logic here to generate a short URL.
+    // You can use a service like Bitly or a custom URL shortening algorithm.
+    // For this example, let's return a dummy short URL.
+    return 'https://short.url/example';
   }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
