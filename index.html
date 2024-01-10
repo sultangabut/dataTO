@@ -3,40 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Short URL Generator</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Input Data to Excel</title>
 </head>
 <body>
 
-<div class="container mt-5">
-  <h1 class="mb-4">Short URL Generator</h1>
-  
-  <div class="mb-3">
-    <label for="originalUrl" class="form-label">Original URL:</label>
-    <input type="url" class="form-control" id="originalUrl" placeholder="Enter your URL" required>
-  </div>
+  <form id="dataForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
 
-  <button type="button" class="btn btn-primary" id="generateBtn">Generate Short URL</button>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
 
-  <div id="result" class="mt-3"></div>
-</div>
+    <button type="button" onclick="exportToExcel()">Export to Excel</button>
+  </form>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function exportToExcel() {
+      const dataForm = document.getElementById('dataForm');
+      const formData = new FormData(dataForm);
 
-<script>
-  $(document).ready(function() {
-    $('#generateBtn').click(function() {
-      const originalUrl = $('#originalUrl').val();
-
-      $.post('/shorten', { originalUrl }, function(response) {
-        const shortUrl = response.shortUrl;
-        const resultHtml = `<p class="mt-3">Short URL: <a href="${shortUrl}" target="_blank">${shortUrl}</a></p>`;
-        $('#result').html(resultHtml);
+      const excelData = {};
+      formData.forEach((value, key) => {
+        excelData[key] = value;
       });
-    });
-  });
-</script>
+
+      const jsonData = [excelData];
+
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
 
 </body>
 </html>
