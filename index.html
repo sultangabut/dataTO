@@ -3,59 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Input Data</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Formulir Data</title>
 </head>
 <body>
 
 <div class="container mt-5">
-  <h2>Form Input Data</h2>
+  <h2>Formulir Input Data</h2>
+
   <form id="dataForm">
     <div class="form-group">
-      <label for="nama">Nama:</label>
-      <input type="text" class="form-control" id="nama" name="nama" required>
+      <label for="namaLengkap">Nama Lengkap:</label>
+      <input type="text" class="form-control" id="namaLengkap" required>
     </div>
     <div class="form-group">
-      <label for="alamat">Alamat:</label>
-      <input type="text" class="form-control" id="alamat" name="alamat" required>
+      <label for="nomorTelepon">Nomor Telepon:</label>
+      <input type="tel" class="form-control" id="nomorTelepon" required>
     </div>
     <div class="form-group">
-      <label for="rt_rw">RT/RW:</label>
-      <input type="text" class="form-control" id="rt_rw" name="rt_rw" required>
+      <label for="dusun">Dusun:</label>
+      <input type="text" class="form-control" id="dusun" required>
     </div>
     <div class="form-group">
-      <label for="telepon">Nomor Telepon:</label>
-      <input type="tel" class="form-control" id="telepon" name="telepon" required>
+      <label for="desa">Desa:</label>
+      <input type="text" class="form-control" id="desa" required>
     </div>
-    <button type="button" class="btn btn-primary" onclick="exportToExcel()">Simpan ke Excel</button>
+    <div class="form-group">
+      <label for="kecamatan">Kecamatan:</label>
+      <input type="text" class="form-control" id="kecamatan" required>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="simpanData()">Simpan</button>
   </form>
+
+  <div class="mt-4">
+    <h2>Data Tersimpan</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nama Lengkap</th>
+          <th>Nomor Telepon</th>
+          <th>Dusun</th>
+          <th>Desa</th>
+          <th>Kecamatan</th>
+        </tr>
+      </thead>
+      <tbody id="tabelData">
+        <!-- Data akan ditampilkan di sini -->
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<!-- jQuery and Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- SheetJS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
-
 <script>
-  function exportToExcel() {
-    const formData = {
-      Nama: $('#nama').val(),
-      Alamat: $('#alamat').val(),
-      "RT/RW": $('#rt_rw').val(),
-      "Nomor Telepon": $('#telepon').val()
-    };
+  function simpanData() {
+    var namaLengkap = $('#namaLengkap').val();
+    var nomorTelepon = $('#nomorTelepon').val();
+    var dusun = $('#dusun').val();
+    var desa = $('#desa').val();
+    var kecamatan = $('#kecamatan').val();
 
-    const data = [Object.keys(formData), Object.values(formData)];
-    const ws = XLSX.utils.aoa_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Data Form");
+    var newRow = `<tr>
+                    <td>${namaLengkap}</td>
+                    <td>${nomorTelepon}</td>
+                    <td>${dusun}</td>
+                    <td>${desa}</td>
+                    <td>${kecamatan}</td>
+                  </tr>`;
 
-    // Save the file
-    XLSX.writeFile(wb, 'data_form.xlsx');
+    $('#tabelData').append(newRow);
+
+    // Bersihkan formulir setelah disimpan
+    $('#dataForm')[0].reset();
   }
 </script>
 
