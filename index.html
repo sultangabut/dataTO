@@ -3,30 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Formulir</title>
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
-  <title>Formulir Data</title>
 </head>
 <body>
 
 <div class="container mt-5">
   <h2>Formulir Input Data</h2>
-
   <form id="dataForm">
     <div class="form-group">
-      <label for="namaLengkap">Nama Lengkap:</label>
-      <input type="text" class="form-control" id="namaLengkap" required>
+      <label for="nama">Nama Lengkap:</label>
+      <input type="text" class="form-control" id="nama" required>
     </div>
     <div class="form-group">
-      <label for="nomorTelepon">Nomor Telepon:</label>
-      <input type="tel" class="form-control" id="nomorTelepon" required>
+      <label for="telepon">Nomor Telepon:</label>
+      <input type="tel" class="form-control" id="telepon" required>
     </div>
     <div class="form-group">
-      <label for="rtRw">RT/RW:</label>
-      <input type="text" class="form-control" id="rtRw" required>
+      <label for="rt_rw">RT/RW:</label>
+      <input type="text" class="form-control" id="rt_rw" required>
     </div>
     <div class="form-group">
       <label for="dusun">Dusun:</label>
@@ -40,37 +36,75 @@
       <label for="kecamatan">Kecamatan:</label>
       <input type="text" class="form-control" id="kecamatan" required>
     </div>
-
     <button type="button" class="btn btn-primary" onclick="simpanData()">Simpan</button>
   </form>
+
+  <h2>Data Tersimpan</h2>
+  <table class="table" id="dataTable">
+    <thead>
+      <tr>
+        <th>Nama</th>
+        <th>Nomor Telepon</th>
+        <th>RT/RW</th>
+        <th>Dusun</th>
+        <th>Desa</th>
+        <th>Kecamatan</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data akan ditambahkan secara dinamis menggunakan jQuery -->
+    </tbody>
+  </table>
 </div>
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
   function simpanData() {
-    var namaLengkap = $('#namaLengkap').val();
-    var nomorTelepon = $('#nomorTelepon').val();
-    var rtRw = $('#rtRw').val();
-    var dusun = $('#dusun').val();
-    var desa = $('#desa').val();
-    var kecamatan = $('#kecamatan').val();
+    // Ambil nilai dari input
+    var nama = $("#nama").val();
+    var telepon = $("#telepon").val();
+    var rt_rw = $("#rt_rw").val();
+    var dusun = $("#dusun").val();
+    var desa = $("#desa").val();
+    var kecamatan = $("#kecamatan").val();
 
-    var rowData = [namaLengkap, nomorTelepon, rtRw, dusun, desa, kecamatan];
+    // Tambahkan data ke tabel
+    $("#dataTable tbody").append("<tr><td>" + nama + "</td><td>" + telepon + "</td><td>" + rt_rw + "</td><td>" + dusun + "</td><td>" + desa + "</td><td>" + kecamatan + "</td><td><button class='btn btn-warning btn-sm' onclick='editData(this)'>Edit</button> <button class='btn btn-danger btn-sm' onclick='hapusData(this)'>Hapus</button></td></tr>");
 
-    // Simpan data ke Excel
-    exportToExcel(rowData);
-
-    // Bersihkan formulir setelah disimpan
-    $('#dataForm')[0].reset();
+    // Reset formulir setelah simpan
+    $("#dataForm")[0].reset();
   }
 
-  function exportToExcel(data) {
-    var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.aoa_to_sheet([data]);
+  function editData(btn) {
+    // Ambil data dari baris tabel
+    var row = $(btn).closest("tr");
+    var nama = row.find("td:eq(0)").text();
+    var telepon = row.find("td:eq(1)").text();
+    var rt_rw = row.find("td:eq(2)").text();
+    var dusun = row.find("td:eq(3)").text();
+    var desa = row.find("td:eq(4)").text();
+    var kecamatan = row.find("td:eq(5)").text();
 
-    XLSX.utils.book_append_sheet(wb, ws, "Data");
-    
-    // Simpan file Excel
-    XLSX.writeFile(wb, "data.xlsx");
+    // Isi formulir dengan data yang akan diubah
+    $("#nama").val(nama);
+    $("#telepon").val(telepon);
+    $("#rt_rw").val(rt_rw);
+    $("#dusun").val(dusun);
+    $("#desa").val(desa);
+    $("#kecamatan").val(kecamatan);
+
+    // Hapus baris yang akan diubah
+    row.remove();
+  }
+
+  function hapusData(btn) {
+    // Hapus baris tabel
+    $(btn).closest("tr").remove();
   }
 </script>
 
