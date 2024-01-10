@@ -64,6 +64,9 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
+  // Data JSON sementara
+  var dataJson = [];
+
   function simpanData() {
     // Ambil nilai dari input
     var nama = $("#nama").val();
@@ -73,38 +76,47 @@
     var desa = $("#desa").val();
     var kecamatan = $("#kecamatan").val();
 
-    // Tambahkan data ke tabel
-    $("#dataTable tbody").append("<tr><td>" + nama + "</td><td>" + telepon + "</td><td>" + rt_rw + "</td><td>" + dusun + "</td><td>" + desa + "</td><td>" + kecamatan + "</td><td><button class='btn btn-warning btn-sm' onclick='editData(this)'>Edit</button> <button class='btn btn-danger btn-sm' onclick='hapusData(this)'>Hapus</button></td></tr>");
+    // Tambahkan data ke tabel dan simpan dalam array JSON
+    dataJson.push({ "Nama": nama, "Telepon": telepon, "RT_RW": rt_rw, "Dusun": dusun, "Desa": desa, "Kecamatan": kecamatan });
+    updateTable();
 
     // Reset formulir setelah simpan
     $("#dataForm")[0].reset();
   }
 
-  function editData(btn) {
-    // Ambil data dari baris tabel
-    var row = $(btn).closest("tr");
-    var nama = row.find("td:eq(0)").text();
-    var telepon = row.find("td:eq(1)").text();
-    var rt_rw = row.find("td:eq(2)").text();
-    var dusun = row.find("td:eq(3)").text();
-    var desa = row.find("td:eq(4)").text();
-    var kecamatan = row.find("td:eq(5)").text();
+  function updateTable() {
+    // Kosongkan tabel
+    $("#dataTable tbody").empty();
 
-    // Isi formulir dengan data yang akan diubah
-    $("#nama").val(nama);
-    $("#telepon").val(telepon);
-    $("#rt_rw").val(rt_rw);
-    $("#dusun").val(dusun);
-    $("#desa").val(desa);
-    $("#kecamatan").val(kecamatan);
-
-    // Hapus baris yang akan diubah
-    row.remove();
+    // Tambahkan data dari array JSON ke tabel
+    $.each(dataJson, function (index, data) {
+      $("#dataTable tbody").append("<tr><td>" + data.Nama + "</td><td>" + data.Telepon + "</td><td>" + data.RT_RW + "</td><td>" + data.Dusun + "</td><td>" + data.Desa + "</td><td>" + data.Kecamatan + "</td><td><button class='btn btn-warning btn-sm' onclick='editData(" + index + ")'>Edit</button> <button class='btn btn-danger btn-sm' onclick='hapusData(" + index + ")'>Hapus</button></td></tr>");
+    });
   }
 
-  function hapusData(btn) {
-    // Hapus baris tabel
-    $(btn).closest("tr").remove();
+  function editData(index) {
+    // Isi formulir dengan data yang akan diubah
+    var data = dataJson[index];
+    $("#nama").val(data.Nama);
+    $("#telepon").val(data.Telepon);
+    $("#rt_rw").val(data.RT_RW);
+    $("#dusun").val(data.Dusun);
+    $("#desa").val(data.Desa);
+    $("#kecamatan").val(data.Kecamatan);
+
+    // Hapus data dari array JSON
+    dataJson.splice(index, 1);
+
+    // Update tabel setelah edit
+    updateTable();
+  }
+
+  function hapusData(index) {
+    // Hapus data dari array JSON
+    dataJson.splice(index, 1);
+
+    // Update tabel setelah hapus
+    updateTable();
   }
 </script>
 
