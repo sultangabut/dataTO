@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
   <title>Formulir Data</title>
 </head>
 <body>
@@ -21,6 +25,10 @@
       <input type="tel" class="form-control" id="nomorTelepon" required>
     </div>
     <div class="form-group">
+      <label for="rtRw">RT/RW:</label>
+      <input type="text" class="form-control" id="rtRw" required>
+    </div>
+    <div class="form-group">
       <label for="dusun">Dusun:</label>
       <input type="text" class="form-control" id="dusun" required>
     </div>
@@ -35,49 +43,34 @@
 
     <button type="button" class="btn btn-primary" onclick="simpanData()">Simpan</button>
   </form>
-
-  <div class="mt-4">
-    <h2>Data Tersimpan</h2>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Nama Lengkap</th>
-          <th>Nomor Telepon</th>
-          <th>Dusun</th>
-          <th>Desa</th>
-          <th>Kecamatan</th>
-        </tr>
-      </thead>
-      <tbody id="tabelData">
-        <!-- Data akan ditampilkan di sini -->
-      </tbody>
-    </table>
-  </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
   function simpanData() {
     var namaLengkap = $('#namaLengkap').val();
     var nomorTelepon = $('#nomorTelepon').val();
+    var rtRw = $('#rtRw').val();
     var dusun = $('#dusun').val();
     var desa = $('#desa').val();
     var kecamatan = $('#kecamatan').val();
 
-    var newRow = `<tr>
-                    <td>${namaLengkap}</td>
-                    <td>${nomorTelepon}</td>
-                    <td>${dusun}</td>
-                    <td>${desa}</td>
-                    <td>${kecamatan}</td>
-                  </tr>`;
+    var rowData = [namaLengkap, nomorTelepon, rtRw, dusun, desa, kecamatan];
 
-    $('#tabelData').append(newRow);
+    // Simpan data ke Excel
+    exportToExcel(rowData);
 
     // Bersihkan formulir setelah disimpan
     $('#dataForm')[0].reset();
+  }
+
+  function exportToExcel(data) {
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.aoa_to_sheet([data]);
+
+    XLSX.utils.book_append_sheet(wb, ws, "Data");
+    
+    // Simpan file Excel
+    XLSX.writeFile(wb, "data.xlsx");
   }
 </script>
 
