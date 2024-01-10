@@ -3,43 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Input Data to Excel</title>
+  <title>Form Input Data</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
+<div class="container mt-5">
+  <h2>Form Input Data</h2>
   <form id="dataForm">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-
-    <button type="button" onclick="exportToExcel()">Export to Excel</button>
+    <div class="form-group">
+      <label for="nama">Nama:</label>
+      <input type="text" class="form-control" id="nama" name="nama" required>
+    </div>
+    <div class="form-group">
+      <label for="alamat">Alamat:</label>
+      <input type="text" class="form-control" id="alamat" name="alamat" required>
+    </div>
+    <div class="form-group">
+      <label for="rt_rw">RT/RW:</label>
+      <input type="text" class="form-control" id="rt_rw" name="rt_rw" required>
+    </div>
+    <div class="form-group">
+      <label for="telepon">Nomor Telepon:</label>
+      <input type="tel" class="form-control" id="telepon" name="telepon" required>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="exportToExcel()">Simpan ke Excel</button>
   </form>
+</div>
 
-  <script>
-    function exportToExcel() {
-      const dataForm = document.getElementById('dataForm');
-      const formData = new FormData(dataForm);
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-      const excelData = {};
-      formData.forEach((value, key) => {
-        excelData[key] = value;
-      });
+<!-- SheetJS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
-      const jsonData = [excelData];
+<script>
+  function exportToExcel() {
+    const formData = {
+      Nama: $('#nama').val(),
+      Alamat: $('#alamat').val(),
+      "RT/RW": $('#rt_rw').val(),
+      "Nomor Telepon": $('#telepon').val()
+    };
 
-      const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
+    const data = [Object.keys(formData), Object.values(formData)];
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Data Form");
 
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'data.json';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  </script>
+    // Save the file
+    XLSX.writeFile(wb, 'data_form.xlsx');
+  }
+</script>
 
 </body>
 </html>
