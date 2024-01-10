@@ -3,27 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <title>Formulir Input Data</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container mt-5">
-    <form id="dataForm">
-      <div class="form-group">
-        <label for="namaLengkap">Nama Lengkap:</label>
-        <input type="text" class="form-control" id="namaLengkap" required>
-      </div>
-      <div class="form-group">
-        <label for="nomorTelepon">Nomor Telepon:</label>
-        <input type="tel" class="form-control" id="nomorTelepon" required>
-      </div>
-      <!-- Tambahkan input fields lainnya -->
-      <button type="button" class="btn btn-primary" onclick="submitData()">Submit</button>
-    </form>
-  </div>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://apis.google.com/js/api.js"></script>
-  <script src="main.js"></script>
+
+<div class="container mt-5">
+  <h2>Formulir Input Data</h2>
+  <form id="dataForm">
+    <div class="mb-3">
+      <label for="nama" class="form-label">Nama Lengkap</label>
+      <input type="text" class="form-control" id="nama" required>
+    </div>
+    <div class="mb-3">
+      <label for="telepon" class="form-label">Nomor Telepon</label>
+      <input type="tel" class="form-control" id="telepon" required>
+    </div>
+    <div class="mb-3">
+      <label for="rt_rw" class="form-label">RT/RW</label>
+      <input type="text" class="form-control" id="rt_rw" required>
+    </div>
+    <div class="mb-3">
+      <label for="dusun" class="form-label">Dusun</label>
+      <input type="text" class="form-control" id="dusun" required>
+    </div>
+    <div class="mb-3">
+      <label for="desa" class="form-label">Desa</label>
+      <input type="text" class="form-control" id="desa" required>
+    </div>
+    <div class="mb-3">
+      <label for="kecamatan" class="form-label">Kecamatan</label>
+      <input type="text" class="form-control" id="kecamatan" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Kirim</button>
+  </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $("#dataForm").submit(function(event) {
+      event.preventDefault();
+      sendDataToSheet();
+    });
+
+    function sendDataToSheet() {
+      const formData = {
+        Nama: $("#nama").val(),
+        Telepon: $("#telepon").val(),
+        RT_RW: $("#rt_rw").val(),
+        Dusun: $("#dusun").val(),
+        Desa: $("#desa").val(),
+        Kecamatan: $("#kecamatan").val(),
+      };
+
+      // Replace SPREADSHEET_ID with your actual Google Sheets ID
+      const SPREADSHEET_ID = "your_spreadsheet_id";
+
+      $.ajax({
+        url: `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/A1:append`,
+        type: "POST",
+        dataType: "json",
+        data: JSON.stringify({
+          values: [Object.values(formData)],
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer YOUR_ACCESS_TOKEN",
+        },
+        success: function(response) {
+          console.log("Data terkirim:", response);
+          // Clear the form after successful submission
+          $("#dataForm")[0].reset();
+        },
+        error: function(error) {
+          console.error("Gagal mengirim data:", error);
+        },
+      });
+    }
+  });
+</script>
+
 </body>
 </html>
