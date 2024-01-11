@@ -1,3 +1,5 @@
+<!-- FormulirData.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +15,39 @@
 
 <div class="container mt-5">
   <form id="dataForm">
-    <!-- Tambahkan elemen formulir sesuai kebutuhan -->
+    <div class="mb-3">
+      <label for="nama" class="form-label">Nama</label>
+      <input type="text" class="form-control" id="nama" required>
+    </div>
+    <div class="mb-3">
+      <label for="telepon" class="form-label">Telepon</label>
+      <input type="tel" class="form-control" id="telepon" required>
+    </div>
+    <div class="mb-3">
+      <label for="rt_rw" class="form-label">RT/RW</label>
+      <input type="text" class="form-control" id="rt_rw" required>
+    </div>
+    <div class="mb-3">
+      <label for="dusun" class="form-label">Dusun</label>
+      <input type="text" class="form-control" id="dusun" required>
+    </div>
+    <div class="mb-3">
+      <label for="desa" class="form-label">Desa</label>
+      <input type="text" class="form-control" id="desa" required>
+    </div>
+    <div class="mb-3">
+      <label for="kecamatan" class="form-label">Kecamatan</label>
+      <input type="text" class="form-control" id="kecamatan" required>
+    </div>
+    <!-- Tambahan elemen formulir -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" required>
+    </div>
+    <div class="mb-3">
+      <label for="alamat" class="form-label">Alamat</label>
+      <textarea class="form-control" id="alamat" required></textarea>
+    </div>
     <button type="button" class="btn btn-primary" id="submitBtn">Submit</button>
   </form>
 </div>
@@ -25,7 +59,7 @@
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.min.js"></script>
 <!-- Custom JavaScript -->
-<script src="script.js"></script>
+<script src="FormulirDataScript.js"></script>
 
 </body>
 </html>
