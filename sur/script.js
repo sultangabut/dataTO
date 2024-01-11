@@ -1,6 +1,8 @@
-// js/script.js
+const spreadsheetId = '1n_kZQZaXrYx2exjILoLZCJPoUxdInlbO3dm8mHM3a60';
+const range = 'TRENGGALEK'; // Sesuaikan dengan nama sheet yang Anda gunakan
 
-const sheetsEndpoint = 'YOUR_GOOGLE_SHEET_API_ENDPOINT';
+const sheetsEndpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=3ddcca91c448871e1eab4b78fbdaf306c32773f2`;
+
 const credentialsPath = 'sur/data.json';
 
 function submitForm() {
