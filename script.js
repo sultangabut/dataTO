@@ -1,52 +1,41 @@
-$(document).ready(function () {
-  $("#googleForm").submit(function (event) {
-    event.preventDefault();
-    const nama = $("#nama").val();
-    const telepon = $("#telepon").val();
-    sendDataToGoogleSheets(nama, telepon);
-  });
-});
+const spreadsheetId = '1n_kZQZaXrYx2exjILoLZCJPoUxdInlbO3dm8mHM3a60';
+const range = 'TRENGGALEK'; // SESUAIKAN
+const apiKey = '3ddcca91c448871e1eab4b78fbdaf306c32773f2';
 
-function sendDataToGoogleSheets(nama, telepon) {
-  gapi.client.sheets.spreadsheets.values.append({
-    spreadsheetId: '1n_kZQZaXrYx2exjILoLZCJPoUxdInlbO3dm8mHM3a60',
-    range: 'Sheet1', // Change this to your sheet name
-    valueInputOption: 'USER_ENTERED',
-    resource: {
-      values: [[nama, telepon]],
+const sheetsEndpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+
+function submitForm() {
+  const formData = {
+    nama: document.getElementById('nama').value,
+    telepon: document.getElementById('telepon').value,
+    rt_rw: document.getElementById('rt_rw').value,
+    dusun: document.getElementById('dusun').value,
+    desa: document.getElementById('desa').value,
+    kecamatan: document.getElementById('kecamatan').value
+  };
+
+  fetch(sheetsEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  }).then(function(response) {
-    console.log(response);
-    // Handle the response as needed
-  }, function(error) {
-    console.error('Error appending data: ' + error.result.error.message);
+    body: JSON.stringify(formData),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      console.log('Data berhasil dikirim ke Google Sheets:', data.message);
+      // Tampilkan pesan sukses ke pengguna jika diperlukan
+      alert('Data berhasil dikirim! Terima kasih.');
+    } else {
+      console.error('Gagal mengirim data ke Google Sheets:', data.error);
+      // Tampilkan pesan kesalahan ke pengguna jika diperlukan
+      alert('Maaf, terjadi kesalahan. Silakan coba lagi nanti.');
+    }
+  })
+  .catch(error => {
+    console.error('Gagal mengirim data ke Google Sheets:', error);
+    // Tampilkan pesan kesalahan ke pengguna jika diperlukan
+    alert('Maaf, terjadi kesalahan. Silakan coba lagi nanti.');
   });
-}
-
-function handleClientLoad() {
-  gapi.load('client:auth2', initClient);
-}
-
-function initClient() {
-  gapi.client.init({
-    apiKey: 'd49a7652f839837375939aa02aa59d04473e1913',
-    clientId: '102717811208183766534',
-    discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-    scope: "https://www.googleapis.com/auth/spreadsheets",
-  }).then(function () {
-    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-  });
-}
-
-function updateSigninStatus(isSignedIn) {
-  if (isSignedIn) {
-    sendDataToGoogleSheets(nama, telepon);
-  } else {
-    $("#googleForm").append('<button id="authorize-button" onclick="handleAuthClick()">Authorize</button>');
-  }
-}
-
-function handleAuthClick() {
-  gapi.auth2.getAuthInstance().signIn();
 }
