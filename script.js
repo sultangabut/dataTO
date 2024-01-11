@@ -1,4 +1,4 @@
-// script.js
+// FormulirDataScript.js
 
 $(document).ready(function () {
   $('#submitBtn').click(function () {
@@ -8,33 +8,32 @@ $(document).ready(function () {
 
 function submitForm() {
   const data = {
-    nama: $('#nama').val(),
-    telepon: $('#telepon').val(),
-    rt_rw: $('#rt_rw').val(),
-    dusun: $('#dusun').val(),
-    desa: $('#desa').val(),
-    kecamatan: $('#kecamatan').val(),
-    email: $('#email').val(),
-    alamat: $('#alamat').val()
+    nama: $('#nama').val().trim(),
+    telepon: $('#telepon').val().trim(),
+    rt_rw: $('#rt_rw').val().trim(),
+    dusun: $('#dusun').val().trim(),
+    desa: $('#desa').val().trim(),
+    kecamatan: $('#kecamatan').val().trim()
   };
 
-  // Memeriksa apakah semua bidang formulir telah diisi
-  if (!validateForm(data)) {
+  if (validateForm(data)) {
+    sendDataToGoogleAppsScript(data);
+  } else {
     showErrorAlert('Silakan isi semua bidang formulir.');
-    return;
   }
+}
 
+function sendDataToGoogleAppsScript(data) {
   $.ajax({
-    url: 'https://script.google.com/macros/s/AKfycbx9vxDGlMm8OKgR3axV9AiPYzr-kaZdSmpFhPccz_Ygw2J-iyJj37cJDCoUz2kdFMP_/exec', // Ganti dengan URL Layanan Web Apps yang Anda salin
+    url: 'YOUR_WEB_APP_URL', // Ganti dengan URL Layanan Web Apps yang Anda salin
     type: 'POST',
     contentType: 'application/json',
     data: JSON.stringify(data),
-    success: function (response) {
+    success: function () {
       showSuccessAlert();
-      // Reset formulir setelah pengiriman berhasil
-      $('#dataForm')[0].reset();
+      resetForm();
     },
-    error: function (error) {
+    error: function () {
       showErrorAlert('Terjadi kesalahan. Silakan coba lagi.');
     }
   });
@@ -57,6 +56,20 @@ function showErrorAlert(message) {
 }
 
 function validateForm(data) {
+  // Membuat array bidang yang harus diisi
+  const requiredFields = ['nama', 'telepon', 'rt_rw', 'dusun', 'desa', 'kecamatan'];
+
   // Memeriksa apakah semua bidang wajib diisi
-  return Object.values(data).every(value => value.trim() !== '');
+  const isValid = requiredFields.every(field => data[field] !== '');
+
+  if (!isValid) {
+    showErrorAlert('Silakan isi semua bidang formulir.');
+  }
+
+  return isValid;
+}
+
+function resetForm() {
+  // Mereset formulir setelah pengiriman berhasil
+  $('#dataForm')[0].reset();
 }
