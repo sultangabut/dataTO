@@ -1,3 +1,5 @@
+// /script.js
+
 const spreadsheetId = '1n_kZQZaXrYx2exjILoLZCJPoUxdInlbO3dm8mHM3a60';
 const range = 'TRENGGALEK'; // SESUAIKAN
 const apiKey = '3ddcca91c448871e1eab4b78fbdaf306c32773f2';
@@ -6,36 +8,35 @@ const sheetsEndpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsh
 
 function submitForm() {
   const formData = {
-    nama: document.getElementById('nama').value,
-    telepon: document.getElementById('telepon').value,
-    rt_rw: document.getElementById('rt_rw').value,
-    dusun: document.getElementById('dusun').value,
-    desa: document.getElementById('desa').value,
-    kecamatan: document.getElementById('kecamatan').value
+    nama: $('#nama').val(),
+    telepon: $('#telepon').val(),
+    rt_rw: $('#rt_rw').val(),
+    dusun: $('#dusun').val(),
+    desa: $('#desa').val(),
+    kecamatan: $('#kecamatan').val()
   };
 
   fetch(sheetsEndpoint, {
-    method: 'POST',
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(formData),
   })
   .then(response => response.json())
   .then(data => {
+    console.log('Data dari Google Sheets:', data);
+    
+    // Tampilkan respons menggunakan Bootstrap dan jQuery
     if (data.success) {
-      console.log('Data berhasil dikirim ke Google Sheets:', data.message);
-      // Tampilkan pesan sukses ke pengguna jika diperlukan
-      alert('Data berhasil dikirim! Terima kasih.');
+      $('#response-message').html(`<div class="alert alert-success" role="alert">${data.message}</div>`);
     } else {
-      console.error('Gagal mengirim data ke Google Sheets:', data.error);
-      // Tampilkan pesan kesalahan ke pengguna jika diperlukan
-      alert('Maaf, terjadi kesalahan. Silakan coba lagi nanti.');
+      $('#response-message').html(`<div class="alert alert-danger" role="alert">${data.error}</div>`);
     }
   })
   .catch(error => {
-    console.error('Gagal mengirim data ke Google Sheets:', error);
-    // Tampilkan pesan kesalahan ke pengguna jika diperlukan
-    alert('Maaf, terjadi kesalahan. Silakan coba lagi nanti.');
+    console.error('Gagal membaca data dari Google Sheets:', error);
+    
+    // Tampilkan pesan kesalahan menggunakan Bootstrap dan jQuery
+    $('#response-message').html('<div class="alert alert-danger" role="alert">Maaf, terjadi kesalahan. Silakan coba lagi nanti.</div>');
   });
 }
