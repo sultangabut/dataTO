@@ -1,4 +1,4 @@
-// FormulirDataScript.js
+// script.js
 
 $(document).ready(function () {
   $('#submitBtn').click(function () {
@@ -25,7 +25,7 @@ function submitForm() {
 
 function sendDataToGoogleAppsScript(data) {
   $.ajax({
-    url: 'YOUR_WEB_APP_URL', // Ganti dengan URL Layanan Web Apps yang Anda salin
+    url: 'https://script.google.com/macros/s/AKfycbx9vxDGlMm8OKgR3axV9AiPYzr-kaZdSmpFhPccz_Ygw2J-iyJj37cJDCoUz2kdFMP_/exec', // Ganti dengan URL Layanan Web Apps yang Anda salin
     type: 'POST',
     contentType: 'application/json',
     data: JSON.stringify(data),
