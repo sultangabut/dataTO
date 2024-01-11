@@ -1,7 +1,7 @@
 const spreadsheetId = '1n_kZQZaXrYx2exjILoLZCJPoUxdInlbO3dm8mHM3a60';
 const range = 'TRENGGALEK'; // Sesuaikan dengan nama sheet yang Anda gunakan
 
-const sheetsEndpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=3ddcca91c448871e1eab4b78fbdaf306c32773f2`;
+const sheetsEndpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}`;
 
 const credentialsPath = 'sur/data.json';
 
@@ -9,6 +9,7 @@ function submitForm() {
   const formData = {
     nama: document.getElementById('nama').value,
     telepon: document.getElementById('telepon').value,
+    rt_rw: document.getElementById('rt_rw').value,
     dusun: document.getElementById('dusun').value,
     desa: document.getElementById('desa').value,
     kecamatan: document.getElementById('kecamatan').value
