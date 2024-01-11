@@ -1,42 +1,45 @@
-// /script.js
-
-const spreadsheetId = '1n_kZQZaXrYx2exjILoLZCJPoUxdInlbO3dm8mHM3a60';
-const range = 'TRENGGALEK'; // SESUAIKAN
-const apiKey = '3ddcca91c448871e1eab4b78fbdaf306c32773f2';
-
-const sheetsEndpoint = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+$(document).ready(function () {
+  $('#submitBtn').click(function () {
+    submitForm();
+  });
+});
 
 function submitForm() {
-  const formData = {
+  const data = {
     nama: $('#nama').val(),
     telepon: $('#telepon').val(),
     rt_rw: $('#rt_rw').val(),
     dusun: $('#dusun').val(),
     desa: $('#desa').val(),
-    kecamatan: $('#kecamatan').val()
+    kecamatan: $('#kecamatan').val(),
   };
 
-  fetch(sheetsEndpoint, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
+  $.ajax({
+    url: 'https://script.google.com/macros/s/AKfycbx9vxDGlMm8OKgR3axV9AiPYzr-kaZdSmpFhPccz_Ygw2J-iyJj37cJDCoUz2kdFMP_/exec', // Ganti dengan URL Layanan Web Apps yang Anda salin
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(data),
+    success: function (response) {
+      showSuccessAlert();
     },
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Data dari Google Sheets:', data);
-    
-    // Tampilkan respons menggunakan Bootstrap dan jQuery
-    if (data.success) {
-      $('#response-message').html(`<div class="alert alert-success" role="alert">${data.message}</div>`);
-    } else {
-      $('#response-message').html(`<div class="alert alert-danger" role="alert">${data.error}</div>`);
+    error: function (error) {
+      showErrorAlert();
     }
-  })
-  .catch(error => {
-    console.error('Gagal membaca data dari Google Sheets:', error);
-    
-    // Tampilkan pesan kesalahan menggunakan Bootstrap dan jQuery
-    $('#response-message').html('<div class="alert alert-danger" role="alert">Maaf, terjadi kesalahan. Silakan coba lagi nanti.</div>');
+  });
+}
+
+function showSuccessAlert() {
+  Swal.fire({
+    icon: 'success',
+    title: 'Data Terkirim!',
+    text: 'Terima kasih atas partisipasi Anda.',
+  });
+}
+
+function showErrorAlert() {
+  Swal.fire({
+    icon: 'error',
+    title: 'Error!',
+    text: 'Terjadi kesalahan. Silakan coba lagi.',
   });
 }
